@@ -1,0 +1,43 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+      - id: CRYPTO-SERVER
+        uri: http://localhost:8081
+        predicates:
+          - Path=/crypto/**
+
+      - id: NOTIFICATION-SERVICE
+        uri: http://localhost:9090
+        predicates:
+          - Path=/mail/**
+
+      - id: USERSERVICE
+        uri: http://localhost:9092
+        predicates:
+          - Path=/api/v1/**
+
+      - id: AUTH-API
+        uri: http://localhost:8007
+        predicates:
+          - Path=/auth/**
+
+
+    discovery:
+      locator:
+        enable: true
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
